@@ -12,7 +12,7 @@ matches = data.keys()
 def definition(word):
 
     word = word.lower()
-    nword = get_close_matches(word, matches, n=1)
+
 
     if word in data: # If word is found, print output
         return data[word]
@@ -20,8 +20,8 @@ def definition(word):
     elif word.title() in data: # Accepting proper nouns as valid input
         return data[word.title()]
 
-    """If the word is not found, this section checks for the closest matching word """
-    elif len(get_close_matches(word, matches)) > 0:
+    elif len(get_close_matches(word, matches)) > 0: # If the word is not found, this section checks for the closest matching word
+        nword = get_close_matches(word, matches, n=1)
         yn = input("Did you mean %s? Enter Y if yes, or N if no: " % nword[0]).lower()
         if yn == "y":
             return data[nword[0]]
