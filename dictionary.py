@@ -1,19 +1,28 @@
+
+""" CLI based interactive dictionary script """
+
+__author__      = "Brian Johnson"
+
 import json
 from difflib import get_close_matches
 
-data = json.load(open("data.json"))
+data = json.load(open("data.json")) # Imports from data.json file
 matches = data.keys()
 
 def definition(word):
-    word = word.lower()
 
-    if word in data:
+    word = word.lower()
+    nword = get_close_matches(word, matches, n=1)
+
+    if word in data: # If word is found, print output
         return data[word]
 
-    elif len(get_close_matches(word, matches)) > 0:
-        nword = get_close_matches(word, matches, n=1)
-        yn = input("Did you mean %s? Enter Y if yes, or N if no: " % nword[0]).lower()
+    elif word.title() in data: # Accepting proper nouns as valid input
+        return data[word.title()]
 
+    """If the word is not found, this section checks for the closest matching word """
+    elif len(get_close_matches(word, matches)) > 0:
+        yn = input("Did you mean %s? Enter Y if yes, or N if no: " % nword[0]).lower()
         if yn == "y":
             return data[nword[0]]
         elif yn == "n":
@@ -24,8 +33,9 @@ def definition(word):
         return "The word doesn't exist."
 
 word = input("What is the word? ")
-output = definition(word)
 
+""" Prints out the output as a list if the type is list """
+output = definition(word)
 if type(output) == list:
     for i in output:
         print(i)
